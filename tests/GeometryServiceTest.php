@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use App\Services\GeometryService;
+use Override;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -14,37 +15,52 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class GeometryServiceTest extends KernelTestCase
 {
     private GeometryService $geoService;
-    
-    public function testCalculateSquareArea() : void
+
+    #[Override]
+    protected function setUp(): void
     {
         self::bootKernel();
         $this->geoService = static::getContainer()->get(GeometryService::class);
+    }
+    public function testCalculateSquareArea(): void
+    {
 
         $squareArea = $this->geoService->calculateSquareArea(5);
-        $this->assertEquals(25,$squareArea,"La surface d'un carré de coté 5 doit être égal à 25");
+        $this->assertEquals(25, $squareArea, "La surface d'un carré de coté 5 doit être égal à 25");
     }
 
     // Remplissez les test restants :)
 
-    public function testCalculateCircleArea() : void{
+    public function testCalculateCircleArea(): void
+    {
+        #assertEqualsWithDelta = Con un margen de error (Cuando es numero largo)
+        $circleArea = $this->geoService->calculateCircleArea(3);
+        $this->assertEqualsWithDelta(28.27, $circleArea, 0.01, "Esta bien, se permite un margen de error de 0.01");
+    }
+    public function testCalculateRectangleArea(): void
+    {
+        $rectangleArea = $this->geoService->calculateRectangleArea(10, 10);
+        $this->assertEquals(100, $rectangleArea,"El resultado es 100");
+    }
+    public function testCalculateTriangleArea(): void
+    {
+        $triangleArea = $this->geoService->calculateTriangleArea(7,7);
+        $this->assertEquals(24.5, $triangleArea, "Esta bien el resultado es 24,05");
+    }
+    public function testCalculateCubeVolume(): void
+    {
+        $cubeVolume = $this->geoService->calculateCubeVolume(3);
+        $this->assertEquals(27, $cubeVolume, "El resultado tiene que ser 27");
 
-        // To do...
     }
-    public function testCalculateRectangleArea() : void{
-
-        // To do...
+    public function testCalculateCylinderVolume(): void
+    {
+       $cylinderVolume = $this->geoService->calculateCylinderVolume(4,2);
+       $this->assertEqualsWithDelta(100.52, $cylinderVolume, 0.02, "Margen de error de 0.2 dependiendo de como se calcule el num pi");
     }
-    public function testCalculateTriangleArea() : void{
-        // To do...
-    }
-    public function testCalculateCubeVolume() : void{
-        // To do...
-
-    }
-    public function testCalculateCylinderVolume() : void{
-        // To do...
-    }
-    public function testCalculateConeVolume() : void{
-        // To do...
+    public function testCalculateConeVolume(): void
+    {
+       $coneVolume = $this->geoService->calculateConeVolume(2,2);
+       $this->assertEqualsWithDelta(8.38, $coneVolume, 0.01);
     }
 }

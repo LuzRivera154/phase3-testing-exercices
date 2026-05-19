@@ -7,7 +7,7 @@ use InvalidArgumentException;
 /**
  * Voir la classe de test PremiumMemberServiceTest pour les specifications de chaque méthode de cette classe.
  */
-class PremiumMemberService 
+class PremiumMemberService
 {
     /**
      * Génère un rapport complet sur le profil d'un membre.
@@ -63,17 +63,20 @@ class PremiumMemberService
      */
     public function applyPromoCode(float $amount, string|null $code): float
     {
+        if (!$code) {
+            return $amount;
+        }
         $code = strtoupper($code);
-        
+
         if ($code === 'VIP20') {
             return $amount * 0.80;
         }
-        
+
         if ($code === 'SUMMER50') {
             return $amount * 0.50;
         }
 
-        return $amount;
+        throw new InvalidArgumentException("Codigo invalido");
     }
 
     /**
